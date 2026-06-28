@@ -7,21 +7,42 @@ public class UIManager : MonoBehaviour
     public GameObject _panelAudio;
     public GameObject _panelHotkey;
 
+    [SerializeField] private GraphicsPanelUI graphicsPanelUI;
+    [SerializeField] private AudioPanelUI audioPanelUI;
+
     private void Awake()
     {
         _panelSetting.SetActive(false);
     }
+
+    private void Start()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+    }
+
     private void Update()
     {
-        if(Input.GetKey(KeyCode.Escape))
+        if(Input.GetKeyDown(KeyCode.Escape))
         {
+            Time.timeScale = 0f;
             _panelSetting.SetActive(true);
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
         }
     }
 
     public void Close()
     {
+        graphicsPanelUI.CancelPreview();
+        audioPanelUI.CancelPreview();
+
         _panelSetting.SetActive(false);
+
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+
+        Time.timeScale = 1;
     }
 
     public void OnGraphicPanel()

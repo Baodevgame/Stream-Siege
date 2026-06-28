@@ -3,9 +3,20 @@ using UnityEngine.UI;
 
 public class PlayerHealthUI : MonoBehaviour
 {
-    [SerializeField]private Image hpFill;
+    [SerializeField] private PlayerHealth playerHealth;
+    [SerializeField] private Image hpFill;
 
-    public void UpdateHp(float currentHp,float maxHp)
+    private void OnEnable()
+    {
+        playerHealth.OnHealthChanged += UpdateHp;
+    }
+
+    private void OnDisable()
+    {
+        playerHealth.OnHealthChanged -= UpdateHp;
+    }
+
+    private void UpdateHp(float currentHp, float maxHp)
     {
         hpFill.fillAmount = currentHp / maxHp;
     }

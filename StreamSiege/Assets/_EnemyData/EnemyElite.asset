@@ -18,5 +18,5 @@ MonoBehaviour:
   damage: 20
   attackRange: 2
   attackCooldown: 0.8
-  projectilePrefab: {fileID: 8714025986750109294, guid: b415a77d15903204b8c5976985d5ab91, type: 3}
+  projectilePrefab: {fileID: 0}
   projectileSpeed: 0

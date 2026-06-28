@@ -1003,9 +1003,9 @@ GameObject:
   - component: {fileID: 6889033985529441636}
   - component: {fileID: 7456360404365027159}
   - component: {fileID: 5402948856178089261}
-  - component: {fileID: 7301724188642062612}
   - component: {fileID: 2926917709532621785}
   - component: {fileID: 4113196218819643274}
+  - component: {fileID: 7050162085895079792}
   m_Layer: 0
   m_Name: Elite_1
   m_TagString: Enemy
@@ -1108,19 +1108,6 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 1
---- !u!114 &7301724188642062612
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5335207184416572060}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1aad0820e37b20541b07b6bba18306e7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyCtrl
-  enemyData: {fileID: 11400000, guid: 78094259282bf784eb2b5baa95f96a95, type: 2}
 --- !u!114 &2926917709532621785
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1146,6 +1133,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b26654ff504b396428a322d3d396558b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PoolObject
+--- !u!114 &7050162085895079792
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5335207184416572060}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 416d2dfcf9483944aa1f2b0c64f13266, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Enemy
+  enemyData: {fileID: 11400000, guid: 78094259282bf784eb2b5baa95f96a95, type: 2}
 --- !u!1 &5481225806758372237
 GameObject:
   m_ObjectHideFlags: 0

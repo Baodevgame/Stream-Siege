@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerSkillController : MonoBehaviour
 {
@@ -17,9 +18,17 @@ public class PlayerSkillController : MonoBehaviour
 
     [Header("Blade Storm")]
     [SerializeField] private float swordDuration = 10f;
+    [SerializeField] private float swordRadius = 4f;
+    [SerializeField] private float swordDamage = 20f;
+    [SerializeField] private float swordTick = 0.2f;
 
+    private float swordTickTimer;
     private float swordTimer;
     private bool swordActive;
+
+    [Header("Mega Blast")]
+    [SerializeField] private float blastRadius = 8f;
+    [SerializeField] private float blastDamage = 100f;
 
     [Header("Charges")]
     [SerializeField] private int speedCharges;
@@ -32,6 +41,19 @@ public class PlayerSkillController : MonoBehaviour
 
     [Header("Blade Storm VFX")]
     [SerializeField] private GameObject swordVFX;
+
+    [Header("Mega Blast VFX")]
+    [SerializeField] private GameObject megaBlastVFX;
+
+    //===============Skill Status===============
+    [Header("Speed Boost Status")]
+    [SerializeField] private Image speedBoostStatus;
+
+    [Header("Enemy Shield Status")]
+    [SerializeField] private Image enegyShieldStatus;
+
+    [Header("Blade Storm Status")]
+    [SerializeField] private Image bladeStormStatus;
 
     public float SpeedMultiplier => speedMultiplier;
 
@@ -102,6 +124,7 @@ public class PlayerSkillController : MonoBehaviour
 
         speedActive = true;
         speedTimer = speedDuration;
+        speedBoostStatus.color = new Color(1f, 1f, 1f);
 
         Debug.Log($"Speed Used. Remaining: {speedCharges}");
     }
@@ -121,6 +144,7 @@ public class PlayerSkillController : MonoBehaviour
 
         if (shieldVFX != null)
             shieldVFX.SetActive(true);
+        enegyShieldStatus.color = new Color(1f, 1f, 1f);
 
         Debug.Log($"Shield Used. Remaining: {shieldCharges}");
     }
@@ -138,10 +162,44 @@ public class PlayerSkillController : MonoBehaviour
         swordActive = true;
         swordTimer = swordDuration;
 
+        swordActive = true;
+        swordTimer = swordDuration;
+        swordTickTimer = 0f;
+
         if (swordVFX != null)
             swordVFX.SetActive(true);
+        bladeStormStatus.color = new Color(1f, 1f, 1f);
 
         Debug.Log($"Sword Used. Remaining: {swordCharges}");
+    }
+
+    private void DamageEnemiesAround()
+    {
+        swordTickTimer -= Time.deltaTime;
+
+        if (swordTickTimer > 0f)
+            return;
+
+        swordTickTimer = swordTick;
+
+        Collider[] hits =
+            Physics.OverlapSphere(
+                transform.position,
+                swordRadius);
+
+        foreach (Collider hit in hits)
+        {
+            if (hit.CompareTag("Enemy"))
+            {
+                EnemyHealth enemy =
+                    hit.GetComponent<EnemyHealth>();
+
+                if (enemy != null)
+                {
+                    enemy.TakeDamage(swordDamage);
+                }
+            }
+        }
     }
 
     private void UseBoom()
@@ -156,8 +214,44 @@ public class PlayerSkillController : MonoBehaviour
 
         Debug.Log($"Boom Used. Remaining: {boomCharges}");
 
-        // TODO:
-        // Spawn Boom
+        MegaBlast();
+        if (megaBlastVFX != null)
+        {
+            GameObject blast = Instantiate(megaBlastVFX, transform.position, Quaternion.identity);
+            blast.SetActive(true);
+            Destroy(blast, 2f);
+        }
+    }
+
+    private void MegaBlast()
+    {
+        Collider[] hits =
+            Physics.OverlapSphere(
+                transform.position,
+                blastRadius);
+
+        foreach (Collider hit in hits)
+        {
+            if (hit.CompareTag("Enemy"))
+            {
+                EnemyHealth enemy =
+                    hit.GetComponent<EnemyHealth>();
+
+                if (enemy != null)
+                {
+                    enemy.TakeDamage(blastDamage);
+                }
+            }
+        }
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(transform.position, swordRadius);
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, blastRadius);
     }
 
     #endregion
@@ -173,6 +267,7 @@ public class PlayerSkillController : MonoBehaviour
             if (speedTimer <= 0f)
             {
                 speedActive = false;
+                speedBoostStatus.color = new Color(0.2f, 0.2f, 0.2f);
             }
         }
 
@@ -186,17 +281,20 @@ public class PlayerSkillController : MonoBehaviour
 
                 if (shieldVFX != null)
                     shieldVFX.SetActive(false);
+                enegyShieldStatus.color = new Color(0.2f, 0.2f, 0.2f);
             }
         }
 
         if(swordActive)
         {
+            DamageEnemiesAround();
             swordTimer -= Time.deltaTime;
             if (swordTimer <= 0f)
             {
                 swordActive = false;
                 if (swordVFX != null)
                     swordVFX.SetActive(false);
+                bladeStormStatus.color = new Color(0.2f, 0.2f, 0.2f);
             }
         }
     }
